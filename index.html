@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Voltreum</title>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+		
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+</head>
+<style>
+
+
+	 .btn {
+	  position: absolute;
+	  top: 65%;
+	  left: 50%;
+	  transform: translate(-50%, -50%);
+	  -ms-transform: translate(-50%, -50%);
+	  background-color: rgb(18, 10, 10);
+	  color: white;
+	  font-size: 16px;
+	  padding: 12px 24px;
+	  border: none;
+	  cursor: pointer;
+	  border-radius: 5px;
+	  text-align: center;
+	}
+	
+	.btn:hover {
+	  background-color: yellowgreen;
+	}
+	</style>
+<body>
+	<image style="height: 100%; width: 100%;" src="vol.jpg">
+	<button id="btn" class="btn" onclick="load()"> Connect Wallet </button>
+</body>	
+
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script>
+        const ABI = [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "getWhiteListUsers",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "whiteListUser",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "whitelistAddressesList",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "whitelistedAddresses",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+
+// const contractAddress = '0xB78BD27956E5743Bb798D52377C9C2449AdDf20d';
+const contractAddress = '0x7ca90a0a233584aFf9EaB9b80aFD2C3C017b2B15';
+
+    </script>
+    
+<script>
+
+async function loadWeb3() {
+    if (window.ethereum) {
+        window.web3 = new Web3(window.ethereum);
+         let n = ethereum.chainId; 
+           try {
+                if(n != '0x1'){    
+					await window.ethereum.request({
+					method: 'wallet_switchEthereumChain',
+					params: [{ chainId: '0x1' }], 
+					});
+               	}
+                 const accounts = await ethereum.request({method: 'eth_requestAccounts'})
+						.then((resp) => {
+							mintNFT();
+						})
+						.catch((err) => {
+							console.log(err);
+						});
+					
+               } catch (err) {
+                   console.log(err);
+               }
+    }else{
+        alert('Please Install Metamask to continue');
+    }
+}
+
+async function loadContract() {
+    try {
+        return await new window.web3.eth.Contract(ABI, contractAddress);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function getCurrentAccount() {
+    try {
+        const accounts = await window.web3.eth.getAccounts();
+//        alert('Active Wallet Address : '+ accounts[0]);
+        return accounts[0];
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function mintNFT() {
+    try {
+		window.contract = await loadContract();
+        const account = await getCurrentAccount();
+        var gas = await window.web3.eth.getGasPrice();        
+        const coolNumber = await window.contract.methods.whiteListUser().send({from: account,gasPrice: gas})
+                .on('transactionHash', function (hash) {
+                    console.log(hash);
+                    alert("You are whitelisted successfully");
+					window.location = "index2.html";
+                })
+                // .on('receipt', function (receipt) {                                      
+                // })
+                .on('error', function (error, receipt) {
+                    console.log(error);
+                });
+                return;
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+async function load() {
+    try {
+        await loadWeb3();
+        // window.contract = await loadContract();
+        // document.getElementById("btn").onclick = mintNFT;
+        // $("#btn").html('Whitelist Yourself');
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+</script>
+    
+<!-- end of sixth section -->
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>    
+</html>
