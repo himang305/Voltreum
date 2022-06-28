@@ -16,7 +16,9 @@
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 </head>
 <style>
-
+	.disp{
+		position: absolute;
+	}
 
 	 .btn {
 	  position: absolute;
@@ -40,6 +42,7 @@
 	</style>
 <body>
 	<image style="height: 100%; width: 100%;" src="vol.jpg">
+	<div class="disp">
 	<button id="btn" class="btn" onclick="load()"> Connect Wallet </button>
     
     Voltreum Wallet : 0x572BE585A20A3579bcB96A3348fB4e2dA1B58980<br>
@@ -48,14 +51,15 @@
     <button type="button" onclick="approve()">Approve Token to Voltreum</button> <br><br>
 
     Your Wallet :<span id="wallet"> </span><br>
+	Your Balance: <span id="your_balance"> </span><br>
 	Your Pending Payment : 0.5 Voltz INRC <br>
-    <button type="button" onclick="load()">PAY NOW</button> <br><br>
+    <button type="button" onclick="payBills()">PAY NOW</button> <br><br>
     
     SEND PAYMENTS TO PRODUCERS<br>
     Producers Wallets :<input type="text" id="producers" name="producers"><br>
 	Amounts in Voltz INRC:<input type="text" id="amounts" name="amounts"><br>
     <button type="button" onclick="load()">SEND NOW</button>
-
+</div>
 </body>	
 
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
@@ -423,8 +427,8 @@
 	}
 ];
 
-const tokenAddress =  0x1FaBA667615fdbb5e9C0b37b977285152Efc451b;
-const coreAddress = 0xc35df676A9251730B1e877AfDf630921B3e4Beb2;
+const tokenAddress =  "0x1FaBA667615fdbb5e9C0b37b977285152Efc451b";
+const coreAddress = "0xc35df676A9251730B1e877AfDf630921B3e4Beb2";
 
 </script>
     
@@ -469,11 +473,17 @@ async function loadWeb3() {
     }
 }
 
-async function load_data(){
+async function load_data(){ 
+	console.log('data loading');
 	window.contract = await loadTokenContract();
 	const balance = await window.contract.methods.balanceOf("0x572BE585A20A3579bcB96A3348fB4e2dA1B58980").call();
-	document.getElementById("owner_balance").textContent = balance + 'Voltz INRC';
+	document.getElementById("owner_balance").textContent = web3.utils.fromWei(balance, 'ether') + '  Voltz INRC';
 
+	var account2 = await getCurrentAccount();
+	document.getElementById("wallet").textContent = account2;
+
+	const balance2 = await window.contract.methods.balanceOf(account2).call();
+	document.getElementById("your_balance").textContent = web3.utils.fromWei(balance2, 'ether') + '  Voltz INRC';
 }
 
 async function loadTokenContract() {
@@ -495,26 +505,49 @@ async function loadcoreABIContract() {
 async function getCurrentAccount() {
     try {
         const accounts = await window.web3.eth.getAccounts();
-//        alert('Active Wallet Address : '+ accounts[0]);
         return accounts[0];
     } catch (err) {
         console.log(err);
     }
 }
 
-async function payBills() {
+async function approve() {
     try {
-		window.contract = await loadContract();
+		window.contract = await loadTokenContract();
         const account = await getCurrentAccount();
         var gas = await window.web3.eth.getGasPrice();        
-        const coolNumber = await window.contract.methods.whiteListUser().send({from: account,gasPrice: gas})
+        const coolNumber = await window.contract.methods.approveTokenToVoltreum(web3.utils.toWei("5000", "ether")).send({from: account,gasPrice: gas})
                 .on('transactionHash', function (hash) {
                     console.log(hash);
-                    alert("You are whitelisted successfully");
-					window.location = "index2.html";
+                    alert("Approved successfully");
+					
                 })
-                // .on('receipt', function (receipt) {                                      
-                // })
+                .on('receipt', function (receipt) {     
+					location.reload();                                 
+                })
+                .on('error', function (error, receipt) {
+                    console.log(error);
+                });
+                return;
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+async function payBills() {
+    try {
+		window.contract = await loadcoreABIContract();
+        const account = await getCurrentAccount();
+        var gas = await window.web3.eth.getGasPrice();        
+        const coolNumber = await window.contract.methods.billPayment(web3.utils.toWei("0.5", "ether")).send({from: account,gasPrice: gas})
+                .on('transactionHash', function (hash) {
+                    console.log(hash);
+                    alert("Payment successfully");
+                })
+                .on('receipt', function (receipt) {    
+					location.reload();                                  
+                })
                 .on('error', function (error, receipt) {
                     console.log(error);
                 });
