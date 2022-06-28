@@ -18,6 +18,10 @@
 <style>
 	.disp{
 		position: absolute;
+		width: 100%;
+		padding: 10px;
+		border: 5px solid gray;
+		margin: 0;
 	}
 
 	 .btn {
@@ -43,7 +47,7 @@
 <body>
 	<image style="height: 100%; width: 100%;" src="vol.jpg">
 	<div class="disp">
-	<button id="btn" class="btn" onclick="load()"> Connect Wallet </button>
+	<!-- <button id="btn" class="btn" onclick="load()"> Connect Wallet </button> -->
     
     Voltreum Wallet : 0x572BE585A20A3579bcB96A3348fB4e2dA1B58980<br>
     Balance: <span id="owner_balance"> </span><br><br>
@@ -566,6 +570,10 @@ async function load() {
         console.log(err);
     }
 }
+
+$(document).ready(function () {
+    load();
+});
 
 </script>
     
