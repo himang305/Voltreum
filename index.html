@@ -42,54 +42,90 @@
 <body>
 	<image style="height: 100%; width: 100%;" src="vol.jpg">
 	<button id="btn" class="btn" onclick="load()"> Connect Wallet </button>
+
 </body>	
 
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
-        const ABI = [
+        const tokenABI = [
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
 	},
 	{
-		"inputs": [],
-		"name": "getWhiteListUsers",
-		"outputs": [
+		"anonymous": false,
+		"inputs": [
 			{
-				"internalType": "address[]",
-				"name": "",
-				"type": "address[]"
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
-		"type": "function"
+		"name": "Approval",
+		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "whiteListUser",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
 	},
 	{
 		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
 			{
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "whitelistAddressesList",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
 		"stateMutability": "view",
 		"type": "function"
 	},
@@ -97,11 +133,16 @@
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "",
+				"name": "spender",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
 			}
 		],
-		"name": "whitelistedAddresses",
+		"name": "approve",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -109,15 +150,270 @@
 				"type": "bool"
 			}
 		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "approveTokenToVoltreum",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_coreAddress",
+				"type": "address"
+			}
+		],
+		"name": "assignCoreContractAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "decimals",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "subtractedValue",
+				"type": "uint256"
+			}
+		],
+		"name": "decreaseAllowance",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "addedValue",
+				"type": "uint256"
+			}
+		],
+		"name": "increaseAllowance",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "mint",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+];
+		const coreABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_token",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "billPayment",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "_to",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_values",
+				"type": "uint256[]"
+			}
+		],
+		"name": "sendPayments",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ];
 
-// const contractAddress = '0xB78BD27956E5743Bb798D52377C9C2449AdDf20d';
-const contractAddress = '0x7ca90a0a233584aFf9EaB9b80aFD2C3C017b2B15';
+const tokenAddress =  0x1FaBA667615fdbb5e9C0b37b977285152Efc451b;
+const coreAddress = 0xc35df676A9251730B1e877AfDf630921B3e4Beb2;
 
-    </script>
+</script>
     
 <script>
 
@@ -126,15 +422,26 @@ async function loadWeb3() {
         window.web3 = new Web3(window.ethereum);
          let n = ethereum.chainId; 
            try {
-                if(n != '0x1'){    
+                if(n != '0x1A8C'){  
 					await window.ethereum.request({
-					method: 'wallet_switchEthereumChain',
-					params: [{ chainId: '0x1' }], 
-					});
+                        method: 'wallet_addEthereumChain',
+                        params: [
+                            {
+                                chainId: '0x1A8C',
+                                chainName: 'GDCC Testnet',
+                                rpcUrls: ['https://data-seed1.gdccoin.io/'],
+                                blockExplorerUrls: ['Https://testnet.gdcscan.io'],
+                                nativeCurrency: {
+                                    symbol: 'GDCC',
+                                    decimals: 18
+                                }
+                            }
+                        ]});  
+					
                	}
                  const accounts = await ethereum.request({method: 'eth_requestAccounts'})
 						.then((resp) => {
-							mintNFT();
+							alert("Wallet Successfully Connected");
 						})
 						.catch((err) => {
 							console.log(err);
@@ -148,9 +455,17 @@ async function loadWeb3() {
     }
 }
 
-async function loadContract() {
+async function loadTokenContract() {
     try {
-        return await new window.web3.eth.Contract(ABI, contractAddress);
+        return await new window.web3.eth.Contract(tokenABI, tokenAddress);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function loadcoreABIContract() {
+    try {
+        return await new window.web3.eth.Contract(coreABI, coreAddress);
     } catch (err) {
         console.log(err);
     }
@@ -166,7 +481,7 @@ async function getCurrentAccount() {
     }
 }
 
-async function mintNFT() {
+async function payBills() {
     try {
 		window.contract = await loadContract();
         const account = await getCurrentAccount();
@@ -192,10 +507,7 @@ async function mintNFT() {
 async function load() {
     try {
         await loadWeb3();
-        // window.contract = await loadContract();
-        // document.getElementById("btn").onclick = mintNFT;
-        // $("#btn").html('Whitelist Yourself');
-
+       
     } catch (err) {
         console.log(err);
     }
