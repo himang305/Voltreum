@@ -42,6 +42,20 @@
 <body>
 	<image style="height: 100%; width: 100%;" src="vol.jpg">
 	<button id="btn" class="btn" onclick="load()"> Connect Wallet </button>
+    
+    Voltreum Wallet : 0x572BE585A20A3579bcB96A3348fB4e2dA1B58980<br>
+    Balance: <span id="owner_balance"> </span><br><br>
+    
+    <button type="button" onclick="approve()">Approve Token to Voltreum</button> <br><br>
+
+    Your Wallet :<span id="wallet"> </span><br>
+	Your Pending Payment : 0.5 Voltz INRC <br>
+    <button type="button" onclick="load()">PAY NOW</button> <br><br>
+    
+    SEND PAYMENTS TO PRODUCERS<br>
+    Producers Wallets :<input type="text" id="producers" name="producers"><br>
+	Amounts in Voltz INRC:<input type="text" id="amounts" name="amounts"><br>
+    <button type="button" onclick="load()">SEND NOW</button>
 
 </body>	
 
@@ -442,6 +456,7 @@ async function loadWeb3() {
                  const accounts = await ethereum.request({method: 'eth_requestAccounts'})
 						.then((resp) => {
 							alert("Wallet Successfully Connected");
+							load_data();
 						})
 						.catch((err) => {
 							console.log(err);
@@ -453,6 +468,13 @@ async function loadWeb3() {
     }else{
         alert('Please Install Metamask to continue');
     }
+}
+
+async function load_data(){
+	window.contract = await loadTokenContract();
+	const balance = await window.contract.methods.balanceOf("0x572BE585A20A3579bcB96A3348fB4e2dA1B58980").call();
+	document.getElementById("owner_balance").textContent = balance + 'Voltz INRC';
+
 }
 
 async function loadTokenContract() {
