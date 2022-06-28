@@ -45,7 +45,7 @@
 	}
 	</style>
 <body>
-	<image style="height: 100%; width: 100%;" src="vol.jpeg">
+	<image style="height: 80%; width: 80%;" src="vol.jpeg">
 	<div class="disp">
 	<!-- <button id="btn" class="btn" onclick="load()"> Connect Wallet </button> -->
     
@@ -56,7 +56,7 @@
 
     Your Wallet :<span id="wallet"> </span><br>
 	Your Balance: <span id="your_balance"> </span><br>
-	Your Pending Payment : 0.5 Voltz INRC <br>
+	Your Pending Payment : 500 Voltz INRC <br>
     <button type="button" onclick="payBills()">PAY NOW</button> <br><br>
     
     SEND PAYMENTS TO PRODUCERS<br>
@@ -544,7 +544,7 @@ async function payBills() {
 		window.contract = await loadcoreABIContract();
         const account = await getCurrentAccount();
         var gas = await window.web3.eth.getGasPrice();        
-        const coolNumber = await window.contract.methods.billPayment(web3.utils.toWei("0.5", "ether")).send({from: account,gasPrice: gas})
+        const coolNumber = await window.contract.methods.billPayment(web3.utils.toWei("500", "ether")).send({from: account,gasPrice: gas})
                 .on('transactionHash', function (hash) {
                     console.log(hash);
                     alert("Payment successfully");
