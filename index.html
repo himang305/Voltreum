@@ -58,19 +58,18 @@
 
 		</div>
 		<div class="class2">
-			Consumer Info<br>
+			Your Consumption<br>
 			Your Wallet :<span id="wallet"> </span><br>
 			Your Balance: <span id="your_balance"> </span><br>
-			Your Pending Payment : 50 Voltz INRC <br>
+			Your Pending Bill Payment : <input type="number" id="bill_topay"> 
+			<!-- <span id="bill_topay"> </span> -->
+			 <br>
 			<button type="button" onclick="approve()">Approve Token to Voltreum</button> 
 			<button type="button" onclick="payBills()">PAY NOW</button><br>
-
 		</div>
 		<div class="class3">
-			Producer Info<br>
-			SEND PAYMENTS TO PRODUCERS<br>
-			Producers Wallets :<input type="text" id="producers" name="producers"><br>
-			Amounts in Voltz INRC:<input type="text" id="amounts" name="amounts"><br>
+			Your Production<br>
+			Amounts in Voltz INRC:<input type="number" id="amounts" name="amounts"><br>
 			<button type="button" onclick="payProducers()">SEND NOW</button>
 		</div>
 </body>
@@ -396,52 +395,121 @@
 		}
 	];
 	const coreABI = [
-		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "_token",
-					"type": "address"
-				}
-			],
-			"stateMutability": "nonpayable",
-			"type": "constructor"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "_amount",
-					"type": "uint256"
-				}
-			],
-			"name": "billPayment",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "address[]",
-					"name": "_to",
-					"type": "address[]"
-				},
-				{
-					"internalType": "uint256[]",
-					"name": "_values",
-					"type": "uint256[]"
-				}
-			],
-			"name": "sendPayments",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		}
-	];
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "_userAddress",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_bills",
+				"type": "uint256[]"
+			}
+		],
+		"name": "addbills",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "_userAddress",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_payments",
+				"type": "uint256[]"
+			}
+		],
+		"name": "addpayments",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "getPayment",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "payBill",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_token",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "bills",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "payments",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
 
 	const tokenAddress = "0x1FaBA667615fdbb5e9C0b37b977285152Efc451b";
-	const coreAddress = "0xc35df676A9251730B1e877AfDf630921B3e4Beb2";
+	const coreAddress = "0x585d26CE6E1D28C334E22b307d43F32D5bF283Dd";
 
 </script>
 
@@ -498,6 +566,14 @@
 
 		const balance2 = await window.contract.methods.balanceOf(account2).call();
 		document.getElementById("your_balance").textContent = web3.utils.fromWei(balance2, 'ether') + '  Voltz INRC';
+
+		window.contract = await loadcoreABIContract();
+		const bill = await window.contract.methods.bills(account2).call();
+		document.getElementById("bill_topay").val = web3.utils.fromWei(bill, 'ether');
+
+		const paymentss = await window.contract.methods.payments(account2).call();
+		document.getElementById("amounts").val = web3.utils.fromWei(paymentss, 'ether');
+
 	}
 
 	async function loadTokenContract() {
@@ -551,10 +627,13 @@
 
 	async function payBills() {
 		try {
+
 			window.contract = await loadcoreABIContract();
 			const account = await getCurrentAccount();
 			var gas = await window.web3.eth.getGasPrice();
-			const coolNumber = await window.contract.methods.billPayment(web3.utils.toWei("50", "ether")).send({ from: account, gasPrice: gas })
+			var billss = $('#bill_topay').val();
+
+			const coolNumber = await window.contract.methods.payBill(web3.utils.toWei(billss, "ether")).send({ from: account, gasPrice: gas })
 				.on('transactionHash', function (hash) {
 					console.log(hash);
 					alert("Payment successfully");
@@ -577,10 +656,8 @@
 			window.contract = await loadcoreABIContract();
 			const account = await getCurrentAccount();
 			var gas = await window.web3.eth.getGasPrice();
-			var pro = $('#producers').val();
 			var amount = $('#amounts').val();
-			var amount = amount.toString();
-			const coolNumber = await window.contract.methods.sendPayments([pro],[ web3.utils.toWei(amount, "ether")]).send({ from: account, gasPrice: gas })
+			const coolNumber = await window.contract.methods.getPayment(web3.utils.toWei(amount, "ether")).send({ from: account, gasPrice: gas })
 				.on('transactionHash', function (hash) {
 					console.log(hash);
 					alert("Payment successfully");
