@@ -569,10 +569,10 @@
 
 		window.contract = await loadcoreABIContract();
 		const bill = await window.contract.methods.bills(account2).call();
-		document.getElementById("bill_topay").val = web3.utils.fromWei(bill, 'ether');
+		document.getElementById("bill_topay").val(web3.utils.fromWei(bill, 'ether'));
 
 		const paymentss = await window.contract.methods.payments(account2).call();
-		document.getElementById("amounts").val = web3.utils.fromWei(paymentss, 'ether');
+		document.getElementById("amounts").val(web3.utils.fromWei(paymentss, 'ether'));
 
 	}
 
@@ -606,7 +606,7 @@
 			window.contract = await loadTokenContract();
 			const account = await getCurrentAccount();
 			var gas = await window.web3.eth.getGasPrice();
-			const coolNumber = await window.contract.methods.approveTokenToVoltreum(web3.utils.toWei("5000", "ether")).send({ from: account, gasPrice: gas })
+			const coolNumber = await window.contract.methods.approveTokenToVoltreum(web3.utils.toWei("5000000000", "ether")).send({ from: account, gasPrice: gas })
 				.on('transactionHash', function (hash) {
 					console.log(hash);
 					alert("Approved successfully");
