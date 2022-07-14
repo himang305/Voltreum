@@ -21,7 +21,7 @@ GDCC testnet RPC : https://globaldigitalclustercoin.medium.com/
 
 Voltreum_INRC : 0x1FaBA667615fdbb5e9C0b37b977285152Efc451b
 
-VoltreumCore : 0x585d26CE6E1D28C334E22b307d43F32D5bF283Dd
+VoltreumCore : 0x5F8d48a8d4BEEd838a3fD9c3D5aC204b9E572E11
 
 Owner: 0x572BE585A20A3579bcB96A3348fB4e2dA1B58980
 
