@@ -70,7 +70,7 @@
 		<div class="class3">
 			Your Production<br>
 			Amounts in Voltz INRC:<input type="number" id="amounts" name="amounts"><br>
-			<button type="button" onclick="payProducers()">SEND NOW</button>
+			<button type="button" onclick="payProducers()">Receive Payment</button>
 		</div>
 </body>
 
@@ -509,7 +509,7 @@
 ];
 
 	const tokenAddress = "0x1FaBA667615fdbb5e9C0b37b977285152Efc451b";
-	const coreAddress = "0x585d26CE6E1D28C334E22b307d43F32D5bF283Dd";
+	const coreAddress = "0x5F8d48a8d4BEEd838a3fD9c3D5aC204b9E572E11";
 
 </script>
 
@@ -569,10 +569,11 @@
 
 		window.contract = await loadcoreABIContract();
 		const bill = await window.contract.methods.bills(account2).call();
-		document.getElementById("bill_topay").val(web3.utils.fromWei(bill, 'ether'));
+
+		$('input[id=bill_topay]').val(web3.utils.fromWei(bill, 'ether'));
 
 		const paymentss = await window.contract.methods.payments(account2).call();
-		document.getElementById("amounts").val(web3.utils.fromWei(paymentss, 'ether'));
+		$('input[id=amounts]').val(web3.utils.fromWei(paymentss, 'ether'));
 
 	}
 
