@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "./TimeLock.sol";
+import "./TeamTimeLock.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./Volt.sol";
 
@@ -13,7 +13,7 @@ import "./Volt.sol";
 contract Vesting {
     using SafeMath for uint256;
     Volt public voltContract;
-    TimeLock public timelockContract;
+    TeamTimeLock public timelockContract;
 
     /// Token supply after the ICO assumed as 100% for token share of internal teams
     uint256 totalTokenSuppliedTillIco;
@@ -46,28 +46,28 @@ contract Vesting {
 
         uint256 researchAmount = 50000000 * 10 ** 18;
         timelockContract.initiateTokenLock(
-            researchFund,
+            researchFund,8,1,
             researchAmount
         );
         voltContract.mint(address(timelockContract), researchAmount);
 
         uint256 marketAmount = 120000000 * 10 ** 18;
         timelockContract.initiateTokenLock(
-            marketingFund,
+            marketingFund,10,1,
             marketAmount
         );
         voltContract.mint(address(timelockContract), marketAmount);
 
         uint256 legalAmount = 20000000 * 10 ** 18;
         timelockContract.initiateTokenLock(
-            legalTeamFund,
+            legalTeamFund,4,1,
             legalAmount
         );
         voltContract.mint(address(timelockContract), legalAmount);
 
         uint256 securityAmount = 100000000 * 10 ** 18;
         timelockContract.initiateTokenLock(
-            teamFund,
+            teamFund,12,12,
             securityAmount
         );
         voltContract.mint(address(timelockContract), securityAmount);
