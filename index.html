@@ -1,176 +1,433 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Voltreum</title>
-    <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-		
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>Voltreum</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+		rel="stylesheet">
+
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 </head>
 <style>
-	.disp{
-		position: absolute;
+	.class1, .class2, .class3 {
 		width: 100%;
 		padding: 10px;
-		border: 5px solid gray;
+		border: 5px solid whitesmoke;
 		margin: 0;
 	}
-
-	 .btn {
-	  position: absolute;
-	  top: 65%;
-	  left: 50%;
-	  transform: translate(-50%, -50%);
-	  -ms-transform: translate(-50%, -50%);
-	  background-color: rgb(18, 10, 10);
-	  color: white;
-	  font-size: 16px;
-	  padding: 12px 24px;
-	  border: none;
-	  cursor: pointer;
-	  border-radius: 5px;
-	  text-align: center;
-	}
 	
-	.btn:hover {
-	  background-color: yellowgreen;
-	}
-	</style>
-<body>
-	<image style="height: 100%; width: 100%;" src="vol.jpg">
-	<div class="disp">
-	<!-- <button id="btn" class="btn" onclick="load()"> Connect Wallet </button> -->
-    
-    Voltreum Wallet : 0x572BE585A20A3579bcB96A3348fB4e2dA1B58980<br>
-    Balance: <span id="owner_balance"> </span><br><br>
-    
-    <button type="button" onclick="approve()">Approve Token to Voltreum</button> <br><br>
 
-    Your Wallet :<span id="wallet"> </span><br>
-	Your Balance: <span id="your_balance"> </span><br>
-	Your Pending Payment : 0.5 Voltz INRC <br>
-    <button type="button" onclick="payBills()">PAY NOW</button> <br><br>
-    
-    SEND PAYMENTS TO PRODUCERS<br>
-    Producers Wallets :<input type="text" id="producers" name="producers"><br>
-	Amounts in Voltz INRC:<input type="text" id="amounts" name="amounts"><br>
-    <button type="button" onclick="load()">SEND NOW</button>
-</div>
-</body>	
+	.btn {
+		position: absolute;
+		top: 65%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+		background-color: rgb(18, 10, 10);
+		color: white;
+		font-size: 16px;
+		padding: 12px 24px;
+		border: none;
+		cursor: pointer;
+		border-radius: 5px;
+		text-align: center;
+	}
+
+	.btn:hover {
+		background-color: yellowgreen;
+	}
+</style>
+
+<body style="background-color:grey;">
+	<image style="display: block;  margin-left: auto; 	margin-right: auto; width: 50%;" src="vol.jpeg">
+		<div class="class1">
+			<!-- <button id="btn" class="btn" onclick="load()"> Connect Wallet </button> -->
+			Admin Info<br>
+			Admin Wallet : 0x572BE585A20A3579bcB96A3348fB4e2dA1B58980<br>
+			Balance: <span id="owner_balance"> </span><br>
+
+		</div>
+		<div class="class2">
+			Your Consumption<br>
+			Your Wallet :<span id="wallet"> </span><br>
+			Your Balance: <span id="your_balance"> </span><br>
+			Your Pending Bill Payment : <input type="number" id="bill_topay"> 
+			<!-- <span id="bill_topay"> </span> -->
+			 <br>
+			<button type="button" onclick="approve()">Approve Token to Voltreum</button> 
+			<button type="button" onclick="payBills()">PAY NOW</button><br>
+		</div>
+		<div class="class3">
+			Your Production<br>
+			Amounts in Voltz INRC:<input type="number" id="amounts" name="amounts"><br>
+			<button type="button" onclick="payProducers()">Receive Payment</button>
+		</div>
+</body>
 
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
-        const tokenABI = [
+	const tokenABI = [
+		{
+			"inputs": [],
+			"stateMutability": "nonpayable",
+			"type": "constructor"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "owner",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "spender",
+					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "value",
+					"type": "uint256"
+				}
+			],
+			"name": "Approval",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "from",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "to",
+					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "value",
+					"type": "uint256"
+				}
+			],
+			"name": "Transfer",
+			"type": "event"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "owner",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "spender",
+					"type": "address"
+				}
+			],
+			"name": "allowance",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "spender",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "amount",
+					"type": "uint256"
+				}
+			],
+			"name": "approve",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_amount",
+					"type": "uint256"
+				}
+			],
+			"name": "approveTokenToVoltreum",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_coreAddress",
+					"type": "address"
+				}
+			],
+			"name": "assignCoreContractAddress",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "balanceOf",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "decimals",
+			"outputs": [
+				{
+					"internalType": "uint8",
+					"name": "",
+					"type": "uint8"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "spender",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "subtractedValue",
+					"type": "uint256"
+				}
+			],
+			"name": "decreaseAllowance",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "spender",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "addedValue",
+					"type": "uint256"
+				}
+			],
+			"name": "increaseAllowance",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "amount",
+					"type": "uint256"
+				}
+			],
+			"name": "mint",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "name",
+			"outputs": [
+				{
+					"internalType": "string",
+					"name": "",
+					"type": "string"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "symbol",
+			"outputs": [
+				{
+					"internalType": "string",
+					"name": "",
+					"type": "string"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "totalSupply",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "to",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "amount",
+					"type": "uint256"
+				}
+			],
+			"name": "transfer",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "from",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "to",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "amount",
+					"type": "uint256"
+				}
+			],
+			"name": "transferFrom",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		}
+	];
+	const coreABI = [
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "_userAddress",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_bills",
+				"type": "uint256[]"
+			}
+		],
+		"name": "addbills",
+		"outputs": [],
 		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "Approval",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "Transfer",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			}
-		],
-		"name": "allowance",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
+				"internalType": "address[]",
+				"name": "_userAddress",
+				"type": "address[]"
 			},
 			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
+				"internalType": "uint256[]",
+				"name": "_payments",
+				"type": "uint256[]"
 			}
 		],
-		"name": "approve",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
+		"name": "addpayments",
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -182,7 +439,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "approveTokenToVoltreum",
+		"name": "getPayment",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -190,203 +447,16 @@
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "_coreAddress",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
 			}
 		],
-		"name": "assignCoreContractAddress",
+		"name": "payBill",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "balanceOf",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "decimals",
-		"outputs": [
-			{
-				"internalType": "uint8",
-				"name": "",
-				"type": "uint8"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "subtractedValue",
-				"type": "uint256"
-			}
-		],
-		"name": "decreaseAllowance",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "addedValue",
-				"type": "uint256"
-			}
-		],
-		"name": "increaseAllowance",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "mint",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "name",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "symbol",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalSupply",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "transfer",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "transferFrom",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	}
-];
-		const coreABI = [
 	{
 		"inputs": [
 			{
@@ -401,182 +471,226 @@
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "bills",
+		"outputs": [
+			{
 				"internalType": "uint256",
-				"name": "_amount",
+				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "billPayment",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
 			{
-				"internalType": "address[]",
-				"name": "_to",
-				"type": "address[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "_values",
-				"type": "uint256[]"
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
-		"name": "sendPayments",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"name": "payments",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	}
 ];
 
-const tokenAddress =  "0x1FaBA667615fdbb5e9C0b37b977285152Efc451b";
-const coreAddress = "0xc35df676A9251730B1e877AfDf630921B3e4Beb2";
+	const tokenAddress = "0x1FaBA667615fdbb5e9C0b37b977285152Efc451b";
+	const coreAddress = "0x5F8d48a8d4BEEd838a3fD9c3D5aC204b9E572E11";
 
 </script>
-    
+
 <script>
 
-async function loadWeb3() {
-    if (window.ethereum) {
-        window.web3 = new Web3(window.ethereum);
-         let n = ethereum.chainId; 
-           try {
-                if(n != '0x1A8C'){  
+	async function loadWeb3() {
+		if (window.ethereum) {
+			window.web3 = new Web3(window.ethereum);
+			let n = ethereum.chainId;
+			try {
+				if (n != '0x1A8C') {
 					await window.ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [
-                            {
-                                chainId: '0x1A8C',
-                                chainName: 'GDCC Testnet',
-                                rpcUrls: ['https://data-seed1.gdccoin.io/'],
-                                blockExplorerUrls: ['Https://testnet.gdcscan.io'],
-                                nativeCurrency: {
-                                    symbol: 'GDCC',
-                                    decimals: 18
-                                }
-                            }
-                        ]});  
-					
-               	}
-                 const accounts = await ethereum.request({method: 'eth_requestAccounts'})
-						.then((resp) => {
-							alert("Wallet Successfully Connected");
-							load_data();
-						})
-						.catch((err) => {
-							console.log(err);
-						});
-					
-               } catch (err) {
-                   console.log(err);
-               }
-    }else{
-        alert('Please Install Metamask to continue');
-    }
-}
+						method: 'wallet_addEthereumChain',
+						params: [
+							{
+								chainId: '0x1A8C',
+								chainName: 'GDCC Testnet',
+								rpcUrls: ['https://data-seed1.gdccoin.io/'],
+								blockExplorerUrls: ['Https://testnet.gdcscan.io'],
+								nativeCurrency: {
+									symbol: 'GDCC',
+									decimals: 18
+								}
+							}
+						]
+					});
 
-async function load_data(){ 
-	console.log('data loading');
-	window.contract = await loadTokenContract();
-	const balance = await window.contract.methods.balanceOf("0x572BE585A20A3579bcB96A3348fB4e2dA1B58980").call();
-	document.getElementById("owner_balance").textContent = web3.utils.fromWei(balance, 'ether') + '  Voltz INRC';
+				}
+				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+					.then((resp) => {
+						alert("Wallet Successfully Connected");
+						load_data();
+					})
+					.catch((err) => {
+						console.log(err);
+					});
 
-	var account2 = await getCurrentAccount();
-	document.getElementById("wallet").textContent = account2;
+			} catch (err) {
+				console.log(err);
+			}
+		} else {
+			alert('Please Install Metamask to continue');
+		}
+	}
 
-	const balance2 = await window.contract.methods.balanceOf(account2).call();
-	document.getElementById("your_balance").textContent = web3.utils.fromWei(balance2, 'ether') + '  Voltz INRC';
-}
-
-async function loadTokenContract() {
-    try {
-        return await new window.web3.eth.Contract(tokenABI, tokenAddress);
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function loadcoreABIContract() {
-    try {
-        return await new window.web3.eth.Contract(coreABI, coreAddress);
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function getCurrentAccount() {
-    try {
-        const accounts = await window.web3.eth.getAccounts();
-        return accounts[0];
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function approve() {
-    try {
+	async function load_data() {
+		console.log('data loading');
 		window.contract = await loadTokenContract();
-        const account = await getCurrentAccount();
-        var gas = await window.web3.eth.getGasPrice();        
-        const coolNumber = await window.contract.methods.approveTokenToVoltreum(web3.utils.toWei("5000", "ether")).send({from: account,gasPrice: gas})
-                .on('transactionHash', function (hash) {
-                    console.log(hash);
-                    alert("Approved successfully");
-					
-                })
-                .on('receipt', function (receipt) {     
-					location.reload();                                 
-                })
-                .on('error', function (error, receipt) {
-                    console.log(error);
-                });
-                return;
-    } catch (err) {
-        console.log(err);
-    }
+		const balance = await window.contract.methods.balanceOf("0x572BE585A20A3579bcB96A3348fB4e2dA1B58980").call();
+		document.getElementById("owner_balance").textContent = web3.utils.fromWei(balance, 'ether') + '  Voltz INRC';
 
-}
+		var account2 = await getCurrentAccount();
+		document.getElementById("wallet").textContent = account2;
 
-async function payBills() {
-    try {
+		const balance2 = await window.contract.methods.balanceOf(account2).call();
+		document.getElementById("your_balance").textContent = web3.utils.fromWei(balance2, 'ether') + '  Voltz INRC';
+
 		window.contract = await loadcoreABIContract();
-        const account = await getCurrentAccount();
-        var gas = await window.web3.eth.getGasPrice();        
-        const coolNumber = await window.contract.methods.billPayment(web3.utils.toWei("0.5", "ether")).send({from: account,gasPrice: gas})
-                .on('transactionHash', function (hash) {
-                    console.log(hash);
-                    alert("Payment successfully");
-                })
-                .on('receipt', function (receipt) {    
-					location.reload();                                  
-                })
-                .on('error', function (error, receipt) {
-                    console.log(error);
-                });
-                return;
-    } catch (err) {
-        console.log(err);
-    }
+		const bill = await window.contract.methods.bills(account2).call();
 
-}
+		$('input[id=bill_topay]').val(web3.utils.fromWei(bill, 'ether'));
 
-async function load() {
-    try {
-        await loadWeb3();
-       
-    } catch (err) {
-        console.log(err);
-    }
-}
+		const paymentss = await window.contract.methods.payments(account2).call();
+		$('input[id=amounts]').val(web3.utils.fromWei(paymentss, 'ether'));
 
-$(document).ready(function () {
-    load();
-});
+	}
+
+	async function loadTokenContract() {
+		try {
+			return await new window.web3.eth.Contract(tokenABI, tokenAddress);
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	async function loadcoreABIContract() {
+		try {
+			return await new window.web3.eth.Contract(coreABI, coreAddress);
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	async function getCurrentAccount() {
+		try {
+			const accounts = await window.web3.eth.getAccounts();
+			return accounts[0];
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	async function approve() {
+		try {
+			window.contract = await loadTokenContract();
+			const account = await getCurrentAccount();
+			var gas = await window.web3.eth.getGasPrice();
+			const coolNumber = await window.contract.methods.approveTokenToVoltreum(web3.utils.toWei("5000000000", "ether")).send({ from: account, gasPrice: gas })
+				.on('transactionHash', function (hash) {
+					console.log(hash);
+					alert("Approved successfully");
+
+				})
+				.on('receipt', function (receipt) {
+					location.reload();
+				})
+				.on('error', function (error, receipt) {
+					console.log(error);
+				});
+			return;
+		} catch (err) {
+			console.log(err);
+		}
+
+	}
+
+	async function payBills() {
+		try {
+
+			window.contract = await loadcoreABIContract();
+			const account = await getCurrentAccount();
+			var gas = await window.web3.eth.getGasPrice();
+			var billss = $('#bill_topay').val();
+
+			const coolNumber = await window.contract.methods.payBill(web3.utils.toWei(billss, "ether")).send({ from: account, gasPrice: gas })
+				.on('transactionHash', function (hash) {
+					console.log(hash);
+					alert("Payment successfully");
+				})
+				.on('receipt', function (receipt) {
+					location.reload();
+				})
+				.on('error', function (error, receipt) {
+					console.log(error);
+				});
+			return;
+		} catch (err) {
+			console.log(err);
+		}
+
+	}
+
+	async function payProducers() {
+		try {
+			window.contract = await loadcoreABIContract();
+			const account = await getCurrentAccount();
+			var gas = await window.web3.eth.getGasPrice();
+			var amount = $('#amounts').val();
+			const coolNumber = await window.contract.methods.getPayment(web3.utils.toWei(amount, "ether")).send({ from: account, gasPrice: gas })
+				.on('transactionHash', function (hash) {
+					console.log(hash);
+					alert("Payment successfully");
+				})
+				.on('receipt', function (receipt) {
+					location.reload();
+				})
+				.on('error', function (error, receipt) {
+					console.log(error);
+				});
+			return;
+		} catch (err) {
+			console.log(err);
+		}
+
+	}
+
+	async function load() {
+		try {
+			await loadWeb3();
+
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	$(document).ready(function () {
+		load();
+	});
 
 </script>
-    
+
 <!-- end of sixth section -->
 <!-- jQuery library -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
@@ -585,5 +699,6 @@ $(document).ready(function () {
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
 <!-- Latest compiled JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
 </html>
