@@ -26,7 +26,7 @@ contract TeamTimeLock {
     /// @dev Mapping to track locked amount to be released each month
     mapping(address => uint256) public lockAmountPerPhase;
 
-    event InitiateLock(address user, uint256 value);
+    event InitiateLock(address, uint256, uint256, uint256);
     event ReleaseLock(address user, uint256 value);
 
     /**

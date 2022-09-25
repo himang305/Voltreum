@@ -40,7 +40,7 @@ contract ICO {
      * @dev Constructor Function
      */
     constructor(Volt _voltContract, TimeLock _timelockContract) {
-        investorMinCap = 10**18;
+        investorMinCap = 10 ** 18;
         reserveWallet = address(0xeD35D3276C6535A44fae66525CaAE6F8182eb9F1);
         timelockContract = _timelockContract;
         voltContract = _voltContract;
@@ -114,11 +114,12 @@ contract ICO {
         _preValidatePurchase(_beneficiary);
 
         // calculate token amount to be created
-        uint256 tokens = weiAmount / tokenPrice;
+        uint256 tokens = weiAmount.mul(10 ** 18).div(tokenPrice);
 
         _processPurchase(_beneficiary, tokens);
-        emit TokenPurchase(msg.sender, weiAmount, tokens);
         _updatePurchasingState(_beneficiary, tokens);
+        emit TokenPurchase(msg.sender, weiAmount, tokens);
+
     }
 
     /**

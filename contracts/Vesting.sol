@@ -27,7 +27,7 @@ contract Vesting {
 
     constructor(
         Volt _voltContract,
-        TimeLock _timelockContract
+        TeamTimeLock _timelockContract
     ) {
         owner = msg.sender;
         researchFund = address(0x9995e2d09adBaB13c81Da69701Ac72CF31f91f7e);
