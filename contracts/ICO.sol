@@ -4,12 +4,13 @@ pragma solidity ^0.8.4;
 import "./Volt.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./TimeLock.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 /**
  * @title Seed/Pre-ICO Contract for VOLT Token
  * @dev For Seed round
  */
-contract ICO {
+contract ICO is ReentrancyGuard{
     using SafeMath for uint256;
 
     Volt public voltContract;
@@ -35,7 +36,7 @@ contract ICO {
     mapping(address => uint256) public contributions;
 
     event TokenPurchase(address purchaser, uint256 amount, uint256 value);
-
+    event ChangeAdmin(address);
     /**
      * @dev Constructor Function
      */
@@ -57,7 +58,7 @@ contract ICO {
 
     /// @dev Modifier to allow Token access in ICO active phases only
     modifier onlyWhileOpen() {
-        require(saleActive == true, "Sale Closed");
+        require(saleActive, "Sale Closed");
         _;
     }
 
@@ -100,14 +101,16 @@ contract ICO {
      * @param _newAdmin Address of new ICO Admin
      */
     function changeIcoAdmin(address _newAdmin) external onlyIcoAdmin {
+        require(_newAdmin != address(0),"Invalid address");
         icoAdmin = _newAdmin;
+        emit ChangeAdmin (_newAdmin);
     }
 
     /**
      * @dev Function to buy Volt token through BNB token
      * @param _beneficiary Address of investor
      */
-    function buyVoltFromNative(address _beneficiary) public payable onlyWhileOpen {
+    function buyVoltFromNative(address _beneficiary) public payable onlyWhileOpen nonReentrant{
         uint256 weiAmount = msg.value;
         require(weiAmount >= tokenPrice,"Invalid Value");
         payable(reserveWallet).transfer(weiAmount);

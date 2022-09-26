@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "./Volt.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 /**
  * @title TokenTimelock
@@ -10,10 +12,11 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
  * beneficiaries to extract the tokens after a given release schedule
  * 13 months vesting schedule: After 1 month lock, release 1/12 amount after each 30 days
  */
-contract TeamTimeLock {
+contract TeamTimeLock is ReentrancyGuard{
     using SafeMath for uint256;
+    using SafeERC20 for IERC20;
 
-    Volt public voltContract;
+    IERC20 public voltContract;
 
     address public admin;
     /// @dev Address of contract who can lock token: ICO and Vesting
@@ -28,11 +31,12 @@ contract TeamTimeLock {
 
     event InitiateLock(address, uint256, uint256, uint256);
     event ReleaseLock(address user, uint256 value);
+    event ChangeLocker(address);
 
     /**
      * @dev Constructor Function to add Volt Token Address
      */
-    constructor(Volt _token) {
+    constructor(IERC20 _token) {
         voltContract = _token;
         admin = msg.sender;
     }
@@ -50,6 +54,8 @@ contract TeamTimeLock {
     function changeLockers(address _lockers) external {
         require(msg.sender == admin, "Only Admin allowed");
         lockers = _lockers;
+                emit ChangeLocker(_lockers);
+
     }
 
     /**
@@ -79,7 +85,7 @@ contract TeamTimeLock {
     /**
      * @dev Function to release lock token according to vesting schedule
      */
-    function releaseTokens() public {
+    function releaseTokens() public nonReentrant {
         require(
             block.timestamp >= releaseTime[msg.sender],
             "Check Release Time"
@@ -91,7 +97,7 @@ contract TeamTimeLock {
                 lockAmount[msg.sender] -
                 lockAmountPerPhase[msg.sender];
 
-            voltContract.transfer(msg.sender, lockAmountPerPhase[msg.sender]);
+            voltContract.safeTransfer(msg.sender, lockAmountPerPhase[msg.sender]);
             emit ReleaseLock(msg.sender, lockAmountPerPhase[msg.sender]);
         }
     }

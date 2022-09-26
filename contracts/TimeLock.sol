@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "./Volt.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 /**
  * @title TokenTimelock
@@ -10,10 +12,11 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
  * beneficiaries to extract the tokens after a given release schedule
  * 13 months vesting schedule: After 1 month lock, release 1/12 amount after each 30 days
  */
-contract TimeLock {
+contract TimeLock is ReentrancyGuard{
     using SafeMath for uint256;
+    using SafeERC20 for IERC20;
 
-    Volt public voltContract;
+    IERC20 public voltContract;
 
     address public admin;
     /// @dev Address of contract who can lock token: ICO and Vesting
@@ -28,11 +31,11 @@ contract TimeLock {
 
     event InitiateLock(address user, uint256 value);
     event ReleaseLock(address user, uint256 value);
-
+    event ChangeLocker(address);
     /**
      * @dev Constructor Function to add Volt Token Address
      */
-    constructor(Volt _token) {
+    constructor(IERC20 _token) {
         voltContract = _token;
         admin = msg.sender;
     }
@@ -50,6 +53,7 @@ contract TimeLock {
     function changeLockers(address _lockers) external {
         require(msg.sender == admin, "Only Admin allowed");
         lockers = _lockers;
+        emit ChangeLocker(_lockers);
     }
 
     /**
@@ -57,6 +61,7 @@ contract TimeLock {
      * @param  _admin Address of lockers
      */
     function changeAdmin(address _admin) external {
+        require(_admin != address(0),"Invalid address");
         require(msg.sender == admin, "Only Admin allowed");
         admin = _admin;
     }
@@ -73,13 +78,15 @@ contract TimeLock {
         lockAmount[_beneficiary] = lockAmount[_beneficiary] + _amount;
         lockAmountPerPhase[_beneficiary] = lockAmount[_beneficiary].div(12);
         releaseTime[_beneficiary] = block.timestamp + 86400 * 30 * 8;
+                // releaseTime[_beneficiary] = block.timestamp + 1;
+
         emit InitiateLock(_beneficiary, _amount);
     }
 
     /**
      * @dev Function to release lock token according to vesting schedule
      */
-    function releaseTokens() public {
+    function releaseTokens() public nonReentrant {
         require(
             block.timestamp >= releaseTime[msg.sender],
             "Check Release Time"
@@ -91,7 +98,8 @@ contract TimeLock {
                 lockAmount[msg.sender] -
                 lockAmountPerPhase[msg.sender];
 
-            voltContract.transfer(msg.sender, lockAmountPerPhase[msg.sender]);
+            voltContract.safeTransfer(msg.sender, lockAmountPerPhase[msg.sender]);
+            // voltContract.transfer(msg.sender, lockAmountPerPhase[msg.sender]);
             emit ReleaseLock(msg.sender, lockAmountPerPhase[msg.sender]);
         }
     }

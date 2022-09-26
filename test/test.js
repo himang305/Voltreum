@@ -51,16 +51,25 @@ describe("Crypto_ICO_testing", function () {
         
         var openSale = await icoContract.changeSaleStatus(true);
 
-        var buyTokenFromBnb = await icoContract.connect(invest1).buyVoltFromNative(invest1.address, { value: ethers.utils.parseUnits("2","ether") });
+        var buyTokenFromBnb = await icoContract.connect(invest1).buyVoltFromNative(invest1.address, { value: ethers.utils.parseUnits("12","ether") });
         await buyTokenFromBnb.wait();
 
-        expect(await timelockContract.lockAmount(invest1.address)).to.equal(ethers.utils.parseUnits("2","ether"));
+        expect(await timelockContract.lockAmount(invest1.address)).to.equal(ethers.utils.parseUnits("12","ether"));
 
-        expect(await voltContract.balanceOf(timelockContract.address)).to.equal(ethers.utils.parseUnits("2","ether"));
+        expect(await voltContract.balanceOf(timelockContract.address)).to.equal(ethers.utils.parseUnits("12","ether"));
 
         var reserveWallet = await icoContract.reserveWallet();
 
-        expect(await ethers.provider.getBalance(reserveWallet)).to.equal(ethers.utils.parseUnits("2","ether"));
+        expect(await ethers.provider.getBalance(reserveWallet)).to.equal(ethers.utils.parseUnits("12","ether"));
+
+
+        var withdraw = await timelockContract.connect(invest1).releaseTokens();
+
+        console.log(await voltContract.balanceOf(invest1.address));
+        console.log(await voltContract.balanceOf(timelockContract.address));
+
+
+
 
     });
 
