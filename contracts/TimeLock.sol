@@ -68,6 +68,7 @@ contract TimeLock is ReentrancyGuard {
      */
     function changeLockers(address _lockers) external {
         require(msg.sender == admin, "Only Admin allowed");
+        require(_lockers != address(0), "Invalid address");
         lockers = _lockers;
         emit ChangeLocker(_lockers);
     }
@@ -123,7 +124,7 @@ contract TimeLock is ReentrancyGuard {
         // return month.div(120);
     }
 
-    function releaseTokens() public nonReentrant {
+    function releaseTokens() external nonReentrant {
         uint256 amount = 0;
         uint256 months = calculateMonthsPassed(msg.sender);
         if (months > 0) {

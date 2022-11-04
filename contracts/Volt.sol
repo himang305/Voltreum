@@ -23,16 +23,18 @@ contract Volt is ERC20, ERC20Burnable, AccessControl {
     /// @dev Constructor assigning fee wallet and token name and symbol
     /// @param _feeWallet Wallet receiving the fee on transactions
     constructor(address _feeWallet) ERC20("Volt", "VOLT") {
+        require(_feeWallet != address(0), "Invalid address");
+
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
         feeWallet = _feeWallet;
     }
 
-    /// @dev Function to mint token 
+    /// @dev Function to mint token
     /// @param to Address in which token will be minted
     /// @param amount amount of token to be minted
     function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {
-        require(totalSupply().add(amount) <= MAXSUPPLY,"Reached Max supply");
+        require(totalSupply().add(amount) <= MAXSUPPLY, "Reached Max supply");
         _mint(to, amount);
     }
 

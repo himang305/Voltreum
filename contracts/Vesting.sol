@@ -15,8 +15,6 @@ contract Vesting {
     Volt public voltContract;
     TeamTimeLock public timelockContract;
 
-    /// Token supply after the ICO assumed as 100% for token share of internal teams
-    uint256 totalTokenSuppliedTillIco;
     /// Wallet Addresses of Internal teams of Voltreum
     address researchFund;
     address marketingFund;
@@ -45,7 +43,7 @@ contract Vesting {
     /**
      * @dev Function to execute token vesting process to Internal Teams
      */
-    function doVesting() public {
+    function doVesting() external {
         require(msg.sender == owner, " Only Owner allowed");
 
         uint256 researchAmount = 50000000 * 10**18;
