@@ -7,10 +7,10 @@ import "./TimeLock.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 /**
- * @title Seed/Pre-ICO Contract for VOLT Token
+ * @title Seed Contract for VOLT Token
  * @dev For Seed round
  */
-contract ICO is ReentrancyGuard{
+contract ICO is ReentrancyGuard {
     using SafeMath for uint256;
 
     Volt public voltContract;
@@ -107,13 +107,15 @@ contract ICO is ReentrancyGuard{
     }
 
     /**
-     * @dev Function to buy Volt token through BNB token
+     * @dev Function to buy Volt token through native token
      * @param _beneficiary Address of investor
      */
     function buyVoltFromNative(address _beneficiary) public payable onlyWhileOpen nonReentrant{
         uint256 weiAmount = msg.value;
         require(weiAmount >= tokenPrice,"Invalid Value");
-        payable(reserveWallet).transfer(weiAmount);
+
+        (bool sent, bytes memory data) = reserveWallet.call{value: msg.value}("");
+        require(sent, "Failed to send value");
         _preValidatePurchase(_beneficiary);
 
         // calculate token amount to be created

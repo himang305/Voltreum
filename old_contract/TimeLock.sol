@@ -79,7 +79,6 @@ contract TimeLock is ReentrancyGuard{
         lockAmountPerPhase[_beneficiary] = lockAmount[_beneficiary].div(12);
         releaseTime[_beneficiary] = block.timestamp + 86400 * 30 * 8;
                 // releaseTime[_beneficiary] = block.timestamp + 1;
-
         emit InitiateLock(_beneficiary, _amount);
     }
 

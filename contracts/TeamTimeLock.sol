@@ -76,7 +76,7 @@ contract TeamTimeLock is ReentrancyGuard{
         public
         onlyLockers
     {
-        lockAmount[_beneficiary] = lockAmount[_beneficiary] + _amount;
+        lockAmount[_beneficiary] += _amount;
         lockAmountPerPhase[_beneficiary] = lockAmount[_beneficiary].div(_months);
         releaseTime[_beneficiary] = block.timestamp + 86400 * 30 * _cliff;
         emit InitiateLock(_beneficiary, _months, _cliff, _amount);
@@ -88,18 +88,21 @@ contract TeamTimeLock is ReentrancyGuard{
     function releaseTokens() public nonReentrant {
         require(
             block.timestamp >= releaseTime[msg.sender],
-            "Check Release Time"
+            "Invalid Release Time"
         );
         releaseTime[msg.sender] = releaseTime[msg.sender] + 86400 * 30;
 
         if (lockAmountPerPhase[msg.sender] <= lockAmount[msg.sender]) {
-            lockAmount[msg.sender] =
-                lockAmount[msg.sender] -
-                lockAmountPerPhase[msg.sender];
+            lockAmount[msg.sender] -=  lockAmountPerPhase[msg.sender];
 
             voltContract.safeTransfer(msg.sender, lockAmountPerPhase[msg.sender]);
             emit ReleaseLock(msg.sender, lockAmountPerPhase[msg.sender]);
         }
+    }
+
+    function withdrawTokenAdmin(uint256 _amount) external {
+        require(msg.sender == admin, "Only Admin allowed");
+        voltContract.safeTransfer(msg.sender, _amount);
     }
     
 }
